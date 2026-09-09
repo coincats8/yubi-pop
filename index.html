@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Yubi Pop!</title>
+  <style>
+    :root { --ink:#17151d; --paper:#fffaf0; --pink:#ff5d7a; --yellow:#ffd15c; --blue:#74d8ee; --mint:#69d5ac; }
+    * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { margin:0; min-height:100dvh; background:linear-gradient(145deg,#ffdb7e,#ff9aa9 52%,#8adbea); color:var(--ink); font-family:ui-rounded, "Hiragino Maru Gothic ProN", "Noto Sans JP", system-ui, sans-serif; display:grid; place-items:center; padding:18px; }
+    main { width:min(100%,450px); min-height:680px; border:5px solid var(--ink); border-radius:32px; background:var(--paper); box-shadow:8px 9px 0 rgba(23,21,29,.88); overflow:hidden; display:flex; flex-direction:column; }
+    header { display:flex; align-items:center; justify-content:space-between; padding:17px 19px 13px; border-bottom:4px solid var(--ink); background:#fff; }
+    .brand { font-size:28px; font-weight:1000; letter-spacing:-1.5px; } .brand i{font-style:normal;color:var(--pink)}
+    .badge { border:3px solid var(--ink); border-radius:999px; padding:5px 10px; font-size:12px; font-weight:800; background:var(--yellow); }
+    .screen { flex:1; padding:18px; display:flex; flex-direction:column; gap:16px; }
+    .intro { text-align:center; padding:12px 4px 0; } .intro h1{font-size:31px;line-height:1.15;margin:0 0 10px;letter-spacing:-1px}.intro p{margin:0;color:#625d68;font-size:14px;font-weight:700;line-height:1.6}
+    .round { display:flex; justify-content:space-between; gap:10px; } .pill{border:3px solid var(--ink); border-radius:14px; background:#fff;padding:8px 10px;font-weight:900;font-size:13px;flex:1;text-align:center}.pill strong{font-size:19px}
+    .people { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    .player { min-height:99px; background:#fff; border:3px solid var(--ink); border-radius:18px; padding:10px; display:grid; grid-template-columns:45px 1fr; align-items:center; position:relative; overflow:hidden; }
+    .player.me{background:#e2fff4}.face{width:42px;height:42px;border:3px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:var(--blue);font-size:25px}.player.me .face{background:var(--pink)} .player b{font-size:15px}.player small{display:block;font-size:11px;font-weight:800;color:#6b6570;margin-top:4px}.finger{position:absolute;right:9px;bottom:5px;font-size:39px;transform:rotate(-10deg);filter:drop-shadow(1px 2px 0 #fff)}
+    .choice { background:var(--ink);color:#fff;border-radius:20px;padding:15px; text-align:center; } .choice h2{font-size:16px;margin:0 0 12px}.numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.number{border:3px solid #fff;border-radius:12px;background:transparent;color:#fff;min-height:46px;font-size:20px;font-weight:1000;cursor:pointer}.number.selected{background:var(--yellow);color:var(--ink);transform:translateY(-3px)}
+    button {font-family:inherit; touch-action:manipulation;} .primary{width:100%;border:4px solid var(--ink);border-radius:17px;background:var(--mint);padding:14px;color:var(--ink);font-size:19px;font-weight:1000;box-shadow:0 5px 0 var(--ink);cursor:pointer}.primary:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}.primary:disabled{opacity:.45;cursor:not-allowed}
+    .message {min-height:54px;text-align:center;font-weight:900;font-size:14px;line-height:1.45;padding:3px 5px}.result{display:none;text-align:center}.result.show{display:block}.result h2{font-size:34px;margin:13px 0 4px}.total{font-size:68px;font-weight:1000;line-height:1;color:var(--pink);text-shadow:2px 2px 0 var(--ink)}.mini{font-size:13px;font-weight:800;color:#665f6a}
+    footer {border-top:4px solid var(--ink);background:#fff;padding:11px;text-align:center;font-size:11px;font-weight:800;color:#615b66}.how{color:#5b398d;text-decoration:none;font-weight:1000}
+    .hidden{display:none!important}.flash{animation:flash .55s ease both}@keyframes flash{0%{transform:scale(.85);opacity:0}65%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+    @media(max-width:390px){body{padding:8px}main{min-height:650px;border-radius:25px}.screen{padding:13px;gap:11px}.intro h1{font-size:27px}.player{min-height:86px}.finger{font-size:33px}.choice{padding:12px}}
+  </style>
+</head>
+<body>
+<main>
+  <header><div class="brand">Yubi Pop<i>!</i></div><div class="badge">SOLO PLAY</div></header>
+  <section class="screen">
+    <div class="intro"><h1>Let’s play Yubi Pop!</h1><p>Pick a number, then everyone shows a thumb.<br>Guess the total to build your streak!</p></div>
+    <div class="round"><div class="pill">ROUND<br><strong id="round">1</strong></div><div class="pill">PLAYERS<br><strong>4</strong></div><div class="pill">YOUR STREAK<br><strong id="streak">0</strong></div></div>
+    <div class="people" id="people"></div>
+    <div id="gameArea">
+      <div class="choice"><h2>How many thumbs in total?</h2><div class="numbers" id="numbers"></div></div>
+      <div class="message" id="message">Pick your guess from 0 to 4</div>
+      <button class="primary" id="play" disabled>SHOW THUMB!</button>
+    </div>
+    <div class="result" id="result"><div class="mini">TOTAL THUMBS</div><div class="total" id="total">0</div><h2 id="resultTitle">Nailed it!</h2><p class="mini" id="resultText"></p><button class="primary" id="next">NEXT ROUND</button></div>
+  </section>
+  <footer>Yubi Pop! prototype · <a class="how" href="#" id="reset">PLAY AGAIN</a></footer>
+</main>
+<script>
+  const names=[['YOU','😎','me'],['MOMO','🐱',''],['REN','🦊',''],['SORA','🐸','']];
+  let prediction=null, round=1, streak=0;
+  const people=document.querySelector('#people'), numbers=document.querySelector('#numbers'), play=document.querySelector('#play'), message=document.querySelector('#message');
+  function drawPeople(reveal=null){people.innerHTML='';names.forEach((n,i)=>{const el=document.createElement('div');el.className='player '+n[2];const status=reveal ? (reveal[i]?'Thumb is up!':'No thumb') : 'Thinking…';el.innerHTML=`<div class="face">${n[1]}</div><div><b>${n[0]}</b><small>${status}</small></div><div class="finger">${reveal&&reveal[i]?'👍':'✊'}</div>`;people.append(el)})}
+  function drawNumbers(){numbers.innerHTML='';for(let i=0;i<=4;i++){const b=document.createElement('button');b.className='number'+(prediction===i?' selected':'');b.textContent=i;b.onclick=()=>{prediction=i;drawNumbers();play.disabled=false;message.textContent=`You guessed ${i}. Ready?`};numbers.append(b)}}
+  function start(){prediction=null;round=1;streak=0;document.querySelector('#result').classList.remove('show');document.querySelector('#gameArea').classList.remove('hidden');drawPeople();drawNumbers();update()}
+  function update(){document.querySelector('#round').textContent=round;document.querySelector('#streak').textContent=streak;}
+  play.onclick=()=>{const fingers=names.map(()=>Math.random()>.48);const total=fingers.filter(Boolean).length;drawPeople(fingers);document.querySelector('#gameArea').classList.add('hidden'); const result=document.querySelector('#result'); result.classList.add('show','flash');setTimeout(()=>result.classList.remove('flash'),600);document.querySelector('#total').textContent=total;const hit=prediction===total;const title=document.querySelector('#resultTitle'),text=document.querySelector('#resultText');if(hit){streak++;title.textContent='Nailed it!';text.textContent='Keep that streak going!';}else{streak=0;title.textContent='So close!';text.textContent=`You guessed ${prediction}. Try again!`;}document.querySelector('#next').textContent='NEXT ROUND';update()}
+  document.querySelector('#next').onclick=()=>{round++;prediction=null;document.querySelector('#result').classList.remove('show');document.querySelector('#gameArea').classList.remove('hidden');drawPeople();drawNumbers();play.disabled=true;message.textContent='Pick your guess from 0 to 4';update()}; document.querySelector('#reset').onclick=e=>{e.preventDefault();start()};start();
+</script>
+</body>
+</html>

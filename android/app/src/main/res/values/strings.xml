@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Yubi Pop!</string>
+    <string name="title_activity_main">Yubi Pop!</string>
+    <string name="package_name">com.yubipop.game</string>
+    <string name="custom_url_scheme">com.yubipop.game</string>
+</resources>

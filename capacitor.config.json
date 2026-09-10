@@ -1,0 +1,8 @@
+{
+  "appId": "com.yubipop.game",
+  "appName": "Yubi Pop!",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

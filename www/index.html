@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Yubi Pop!</title>
+<style>
+:root{--ink:#17151d;--paper:#fffaf0;--pink:#ff5d7a;--yellow:#ffd15c;--blue:#74d8ee;--mint:#72dda9;--purple:#7356d9}*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;min-height:100dvh;background:linear-gradient(145deg,#ffda76,#ff9bab 54%,#83d8ef);color:var(--ink);font-family:ui-rounded,"Hiragino Maru Gothic ProN","Noto Sans JP",system-ui,sans-serif;display:grid;place-items:center;padding:12px}main{width:min(100%,450px);border:5px solid var(--ink);border-radius:31px;background:var(--paper);box-shadow:8px 9px 0 rgba(23,21,29,.9);overflow:hidden}header{display:flex;align-items:center;justify-content:space-between;padding:15px 18px 13px;border-bottom:4px solid var(--ink);background:#fff}.brand{font-size:27px;font-weight:1000;letter-spacing:-1.5px}.brand i{font-style:normal;color:var(--pink)}.daily{border:3px solid var(--ink);border-radius:999px;background:var(--yellow);padding:6px 10px;font-weight:1000;font-size:11px;cursor:pointer}.screen{padding:16px;display:flex;flex-direction:column;gap:13px}.score{display:flex;justify-content:center;gap:8px}.score span{border:3px solid var(--ink);border-radius:999px;background:#fff;padding:5px 11px;font-size:12px;font-weight:1000}.score b{color:var(--purple)}
+.step{border:3px solid var(--ink);border-radius:17px;background:#fff;padding:12px 14px;text-align:center;font-weight:1000;font-size:17px;line-height:1.25}.step small{display:block;margin-top:4px;font-size:12px;color:#625d68;font-weight:800}.step.one{background:#e2fff4}.step.two{background:#fff0bb}.step.three{background:#e5ddff}.people{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.player{min-height:95px;background:#fff;border:3px solid var(--ink);border-radius:19px;padding:10px;display:grid;grid-template-columns:46px 1fr;align-items:center;position:relative;overflow:hidden}.player.me{background:#e3fff4;cursor:pointer;touch-action:manipulation}.player.me.ready{background:var(--mint);box-shadow:0 4px 0 var(--ink);transform:translateY(-2px)}.player.me:active{transform:translateY(2px);box-shadow:0 1px 0 var(--ink)}.face{width:43px;height:43px;border:3px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:var(--blue);font-size:25px}.me .face{background:var(--pink)}.player b{font-size:15px}.finger{position:absolute;right:9px;bottom:5px;font-size:39px;transform:rotate(-10deg);filter:drop-shadow(1px 2px 0 #fff)}
+.guess{border:4px solid var(--ink);border-radius:21px;background:var(--ink);color:#fff;padding:13px;text-align:center}.guess h2{margin:0 0 10px;font-size:16px}.numbers{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.number{border:3px solid #fff;border-radius:12px;background:transparent;color:#fff;min-height:44px;font-size:20px;font-weight:1000;cursor:pointer}.number.selected{background:var(--yellow);color:var(--ink);transform:translateY(-3px)}button{font-family:inherit;touch-action:manipulation}.primary{width:100%;border:4px solid var(--ink);border-radius:17px;background:var(--mint);padding:13px;color:var(--ink);font-size:19px;font-weight:1000;box-shadow:0 5px 0 var(--ink);cursor:pointer}.primary:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}.primary:disabled{opacity:.45;cursor:not-allowed}.result{display:none;text-align:center;padding:4px 0 2px}.result.show{display:block}.result h2{font-size:31px;margin:7px 0 3px}.total{font-size:72px;font-weight:1000;line-height:1;color:var(--pink);text-shadow:2px 2px 0 var(--ink)}.mini{font-size:13px;font-weight:900;color:#665f6a;margin:3px 0 14px}.hidden{display:none!important}.flash{animation:flash .55s ease both}@keyframes flash{0%{transform:scale(.85);opacity:0}65%{transform:scale(1.06)}100%{transform:scale(1)}}footer{border-top:4px solid var(--ink);background:#fff;padding:10px;text-align:center;font-size:11px;font-weight:900;color:#615b66}.reset{color:#5b398d;text-decoration:none;font-weight:1000}.modal{position:fixed;inset:0;background:rgba(23,21,29,.45);display:none;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modal-card{width:min(100%,390px);border:4px solid var(--ink);border-radius:25px;background:var(--paper);box-shadow:7px 8px 0 var(--ink);padding:20px;text-align:center}.modal-card h2{margin:0 0 7px;font-size:27px}.challenge{border:3px solid var(--ink);border-radius:17px;background:var(--yellow);padding:12px;margin:15px 0;font-size:15px;font-weight:1000}.secondary{border:3px solid var(--ink);border-radius:14px;background:#fff;padding:10px 17px;font-size:14px;font-weight:1000;cursor:pointer}@media(max-width:390px){body{padding:7px}main{border-radius:25px}.screen{padding:12px;gap:10px}.player{min-height:84px}.finger{font-size:33px}.step{font-size:15px}.guess{padding:10px}}
+</style>
+</head><body><main><header><div class="brand">Yubi Pop<i>!</i></div><button class="daily" id="daily">DAILY POP</button></header><section class="screen"><div class="score"><span>ROUND <b id="round">1</b></span><span>STREAK <b id="streak">0</b></span></div><div class="step one" id="step"><span id="stepMain">1. Tap YOU to choose</span><small id="stepSub">Tap again to switch</small></div><div class="people" id="people"></div><div id="gameArea"><div class="guess"><h2>2. How many thumbs?</h2><div class="numbers" id="numbers"></div></div><button class="primary" id="play" disabled>3. OPEN!</button></div><div class="result" id="result"><div class="mini">TOTAL THUMBS</div><div class="total" id="total">0</div><h2 id="resultTitle">NICE!</h2><p class="mini" id="resultText"></p><button class="primary" id="next">NEXT</button></div></section><footer>Yubi Pop! · <a class="reset" href="#" id="reset">PLAY AGAIN</a></footer></main><section class="modal" id="dailyModal"><div class="modal-card"><h2>Daily Pop!</h2><div class="challenge">WIN 3 IN A ROW</div><button class="secondary" id="closeDaily">BACK</button></div></section>
+
+<script>
+const names=[['YOU','😎','me'],['MOMO','🐱',''],['REN','🦊',''],['SORA','🐸','']];let prediction=null,myThumb=null,round=1,streak=0;const people=document.querySelector('#people'),numbers=document.querySelector('#numbers'),play=document.querySelector('#play'),step=document.querySelector('#step'),stepMain=document.querySelector('#stepMain'),stepSub=document.querySelector('#stepSub');const canPlay=()=>prediction!==null&&myThumb!==null;
+function setStep(){if(myThumb===null){step.className='step one';stepMain.textContent='1. Tap YOU to choose';stepSub.textContent='Tap again to switch'}else if(prediction===null){step.className='step two';stepMain.textContent='2. How many thumbs?';stepSub.textContent='Pick a number below'}else{step.className='step three';stepMain.textContent='3. Ready! Tap OPEN';stepSub.textContent=`Your guess: ${prediction}`}}
+function drawPeople(reveal=null){people.innerHTML='';names.forEach((n,i)=>{const el=document.createElement('div');el.className='player '+n[2]+(i===0&&myThumb?' ready':'');const hand=reveal?reveal[i]:(i===0?myThumb:false);el.innerHTML=`<div class="face">${n[1]}</div><b>${n[0]}</b><div class="finger">${hand?'👍':'✊'}</div>`;if(i===0&&!reveal)el.onclick=()=>{myThumb=myThumb===true?false:true;drawPeople();setStep();play.disabled=!canPlay()};people.append(el)})}
+function drawNumbers(){numbers.innerHTML='';for(let i=0;i<=4;i++){const b=document.createElement('button');b.className='number'+(prediction===i?' selected':'');b.textContent=i;b.onclick=()=>{prediction=i;drawNumbers();setStep();play.disabled=!canPlay()};numbers.append(b)}}function update(){document.querySelector('#round').textContent=round;document.querySelector('#streak').textContent=streak}function resetGame(){prediction=null;myThumb=null;round=1;streak=0;document.querySelector('#result').classList.remove('show');document.querySelector('#gameArea').classList.remove('hidden');drawPeople();drawNumbers();play.disabled=true;setStep();update()}
+play.onclick=()=>{const hands=[myThumb,...names.slice(1).map(()=>Math.random()>.48)],total=hands.filter(Boolean).length;drawPeople(hands);document.querySelector('#gameArea').classList.add('hidden');step.classList.add('hidden');const result=document.querySelector('#result');result.classList.add('show','flash');setTimeout(()=>result.classList.remove('flash'),600);document.querySelector('#total').textContent=total;const hit=prediction===total,title=document.querySelector('#resultTitle'),text=document.querySelector('#resultText');if(hit){streak++;title.textContent='NICE!';text.textContent='Keep the streak!'}else{streak=0;title.textContent='SO CLOSE!';text.textContent=`Your guess: ${prediction}`;}update()};document.querySelector('#next').onclick=()=>{round++;prediction=null;myThumb=null;document.querySelector('#result').classList.remove('show');document.querySelector('#gameArea').classList.remove('hidden');step.classList.remove('hidden');drawPeople();drawNumbers();play.disabled=true;setStep();update()};document.querySelector('#reset').onclick=e=>{e.preventDefault();resetGame()};document.querySelector('#daily').onclick=()=>document.querySelector('#dailyModal').classList.add('show');document.querySelector('#closeDaily').onclick=()=>document.querySelector('#dailyModal').classList.remove('show');resetGame();
+</script>
+<script>
+  const walletStyle = document.createElement('style');
+  walletStyle.textContent = '.wallet{width:100%;border:3px solid #17151d;border-radius:14px;background:#e5ddff;padding:9px;font:1000 13px ui-rounded,system-ui;cursor:pointer}.wallet.connected{background:#72dda9}.daily-record{width:100%;border:3px solid #17151d;border-radius:14px;background:#ffd15c;padding:9px;font:1000 13px ui-rounded,system-ui;cursor:pointer}.daily-record:disabled{opacity:.5}.wallet-status{min-height:14px;margin-top:-8px;text-align:center;font-size:10px;font-weight:900;color:#625d68}';
+  document.head.append(walletStyle);
+  const walletButton = document.createElement('button');
+  const walletStatus = document.createElement('div');
+  walletButton.className = 'wallet';
+  walletButton.textContent = 'CONNECT WALLET';
+  walletStatus.className = 'wallet-status';
+  walletStatus.textContent = 'Connect Phantom on Seeker';
+  const dailyRecordButton = document.createElement('button');
+  dailyRecordButton.className = 'daily-record hidden';
+  dailyRecordButton.textContent = 'SAVE DAILY POP';
+  document.querySelector('.score').after(walletButton, dailyRecordButton, walletStatus);
+  walletButton.onclick = async () => {
+    const plugin = window.Capacitor?.Plugins?.YubiWallet;
+    if (!plugin) { walletStatus.textContent = 'Wallet works in the Seeker app'; return; }
+    walletButton.disabled = true;
+    walletButton.textContent = 'CONNECTING...';
+    walletStatus.textContent = 'Open Phantom and approve';
+    try {
+      const result = await plugin.connect();
+      walletButton.textContent = 'WALLET CONNECTED';
+      walletButton.classList.add('connected');
+      walletStatus.textContent = 'Seeker wallet connected';
+      dailyRecordButton.classList.remove('hidden');
+    } catch (error) {
+      walletButton.textContent = 'CONNECT WALLET';
+      walletStatus.textContent = error?.message || 'Connection cancelled';
+    } finally { walletButton.disabled = false; }
+  };
+  dailyRecordButton.onclick = async () => {
+    const plugin = window.Capacitor?.Plugins?.YubiWallet;
+    if (!plugin) return;
+    dailyRecordButton.disabled = true;
+    dailyRecordButton.textContent = 'SIGNING...';
+    walletStatus.textContent = 'Approve in your wallet';
+    const message = `Yubi Pop Daily Pop\nDate: ${new Date().toISOString().slice(0, 10)}\nRound: ${round}\nStreak: ${streak}`;
+    try {
+      await plugin.signDailyPop({ message });
+      dailyRecordButton.textContent = 'DAILY POP SAVED!';
+      walletStatus.textContent = 'Your Daily Pop was signed';
+    } catch (error) {
+      dailyRecordButton.textContent = 'SAVE DAILY POP';
+      walletStatus.textContent = error?.message || 'Signature cancelled';
+    } finally { dailyRecordButton.disabled = false; }
+  };
+</script>
+</body></html>
